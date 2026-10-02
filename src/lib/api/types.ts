@@ -61,3 +61,22 @@ export interface FilterOptions {
 export interface ApiResponse<T> {
   data: T;
 }
+
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  avatar: string | null;
+  fullName: string | null;
+  mobileNumber: string | null;
+  dateOfBirth: string | null;
+  age: number | null;
+  preferredVenue: Venue | null;
+  profileComplete: boolean;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
