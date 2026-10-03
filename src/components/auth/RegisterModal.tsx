@@ -1,9 +1,14 @@
 "use client"
 
 import { useAuth } from "@/providers/auth-provider";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { register as registerUser } from "@/lib/api/auth";
+import { AuthModal } from "./AuthModal";
+import { AuthFooter } from "./AuthFooter";
+import { AuthInput } from "./AuthInput";
+import Image from "next/image";
+
 
 interface RegisterFormData {
     username: string;
@@ -23,14 +28,32 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
     const { setAuth } = useAuth()
     const [serverError, setServerError] = useState("");
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const avatarInputRef = useRef<HTMLInputElement>(null);
+
 
     const {
         register,
         handleSubmit,
         setError,
         watch,
-        formState: { errors, isSubmitting }
-    } = useForm<RegisterFormData>()
+        formState: { errors, touchedFields, isSubmitting }
+    } = useForm<RegisterFormData>({ mode: "onBlur", })
+
+    const avatarRegister = register("avatar", {
+        validate: {
+            format: (files) => {
+                const file = files?.[0];
+
+                if (!file) return true;
+
+                return (
+                    ["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
+                    "Avatar must be JPG, PNG, or WEBP"
+                );
+            }
+        },
+        onChange: handleAvatarChange,
+    });
 
     const password = watch("password");
 
@@ -92,208 +115,148 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
     }
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-            onClick={onClose}
-        >
-            <div
-                className="w-full max-w-md rounded-xl bg-white p-6"
-                onClick={(event) => event.stopPropagation()}
-            >
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-2xl font-semibold">Sign Up</h2>
+        <AuthModal
+            title="Sign Up"
+            subtitle="Welcome to Kino XII"
+            onClose={onClose}>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
 
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        aria-label="Close"
-                        className="text-2xl"
-                    >
-                        ×
-                    </button>
+                <div
+                    className="flex cursor-pointer gap-3"
+                    onClick={() => avatarInputRef.current?.click()}
+                >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#2A2C3D]">
+                        {avatarPreview ? (
+                            <img
+                                src={avatarPreview}
+                                alt="Avatar preview"
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <Image
+                                src="/icons/upload.svg"
+                                alt=""
+                                width={12}
+                                height={11}
+                            />
+                        )}
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                        <button
+                            type="button"
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                avatarInputRef.current?.click();
+                            }}
+                            className="text-left text-[14px] font-extrabold text-white"
+                        >
+                            {avatarPreview ? "Change avatar" : "Upload avatar (optional)"}
+                        </button>
+
+                        <p className="text-[12px] text-[#A9A9A9]">
+                            JPG, PNG or WEBP
+                        </p>
+                    </div>
+
+                    <input
+                        {...avatarRegister}
+                        ref={(element) => {
+                            avatarRegister.ref(element);
+                            avatarInputRef.current = element;
+                        }}
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        className="hidden"
+                    />
                 </div>
 
-                <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="space-y-4"
-                >
-                    <div>
-                        <label htmlFor="register-username">Username</label>
+                {errors.avatar && (
+                    <p className="text-sm text-[#EC3013]">
+                        {errors.avatar.message}
+                    </p>
+                )}
 
-                        <input
-                            id="register-username"
-                            type="text"
-                            {...register("username", {
-                                required: "Username is required",
-                                minLength: {
-                                    value: 3,
-                                    message: "Username must be at least 3 characters",
-                                },
-                            })}
-                            className="mt-1 w-full rounded border px-3 py-2"
-                        />
 
-                        {errors.username && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.username.message}
-                            </p>
-                        )}
-                    </div>
+                <div className="flex flex-col gap-6">
+                    <AuthInput
+                        id="register-username"
+                        label="Username"
+                        type="text"
+                        placeholder="user"
+                        registration={register("username", {
+                            required: "username",
+                            minLength: {
+                                value: 3,
+                                message: "At least 3 characters",
+                            },
+                        })}
+                        error={errors.username?.message}
+                        valid={touchedFields.username && !errors.username}
+                    />
 
-                    <div>
-                        <label htmlFor="register-email">Email</label>
+                    <AuthInput
+                        id="register-email"
+                        label="Email"
+                        type="email"
+                        placeholder="example@gmail.com"
+                        registration={register("email", {
+                            required: "Email is required",
+                            pattern: {
+                                value: /^\S+@\S+\.\S+$/,
+                                message: "Please enter a valid email address",
+                            },
+                        })}
+                        error={errors.email?.message}
+                        valid={touchedFields.email && !errors.email}
+                    />
 
-                        <input
-                            id="register-email"
-                            type="email"
-                            {...register("email", {
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^\S+@\S+\.\S+$/,
-                                    message: "Please enter a valid email address",
-                                },
-                            })}
-                            className="mt-1 w-full rounded border px-3 py-2"
-                        />
-
-                        {errors.email && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.email.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label htmlFor="register-password">Password</label>
-
-                        <input
+                    <div className="flex justify-between gap-4">
+                        <AuthInput
                             id="register-password"
+                            label="password"
                             type="password"
-                            {...register("password", {
+                            placeholder="••••••••"
+                            registration={register("password", {
                                 required: "Password is required",
                                 minLength: {
                                     value: 3,
                                     message: "Password must be at least 3 characters",
                                 },
                             })}
-                            className="mt-1 w-full rounded border px-3 py-2"
+                            error={errors.password?.message}
+                            valid={touchedFields.password && !errors.password}
                         />
 
-                        {errors.password && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.password.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label htmlFor="register-confirm-password">
-                            Confirm Password
-                        </label>
-
-                        <input
+                        <AuthInput
                             id="register-confirm-password"
+                            label="Confirm password"
                             type="password"
-                            {...register("password_confirmation", {
+                            placeholder="••••••••"
+                            registration={register("password_confirmation", {
                                 required: "Please confirm your password",
                                 validate: (value) =>
                                     value === password || "Passwords do not match",
                             })}
-                            className="mt-1 w-full rounded border px-3 py-2"
+                            error={errors.password_confirmation?.message}
+                            valid={touchedFields.password_confirmation && !errors.password_confirmation}
                         />
-
-                        {errors.password_confirmation && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.password_confirmation.message}
-                            </p>
-                        )}
                     </div>
-
-                    <div>
-                        <label htmlFor="register-avatar">Avatar</label>
-
-                        <input
-                            id="register-avatar"
-                            type="file"
-                            accept=".jpg,.jpeg,.png,.webp"
-                            {...register("avatar", {
-                                validate: {
-                                    format: (files) => {
-                                        const file = files?.[0];
-
-                                        if (!file) {
-                                            return true;
-                                        }
-
-                                        return (
-                                            [
-                                                "image/jpeg",
-                                                "image/png",
-                                                "image/webp",
-                                            ].includes(file.type) ||
-                                            "Avatar must be JPG, PNG, or WebP"
-                                        );
-                                    },
-                                    size: (files) => {
-                                        const file = files?.[0];
-
-                                        if (!file) {
-                                            return true;
-                                        }
-
-                                        return (
-                                            file.size <= 2 * 1024 * 1024 ||
-                                            "Avatar must be smaller than 2MB"
-                                        );
-                                    },
-                                },
-                                onChange: handleAvatarChange,
-                            })}
-                            className="mt-1 w-full"
-                        />
-
-                        {avatarPreview && (
-                            <img
-                                src={avatarPreview}
-                                alt="Avatar preview"
-                                className="mt-3 h-20 w-20 rounded-full object-cover"
-                            />
-                        )}
-
-                        {errors.avatar && (
-                            <p className="mt-1 text-sm text-red-500">
-                                {errors.avatar.message}
-                            </p>
-                        )}
-                    </div>
-
-                    {serverError && (
-                        <p className="text-sm text-red-500">
-                            {serverError}
-                        </p>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-                    >
-                        {isSubmitting ? "Signing up..." : "Sign Up"}
-                    </button>
-                </form>
-
-                <div className="mt-4 text-center text-sm">
-                    <span>Already have an account? </span>
-
-                    <button
-                        type="button"
-                        onClick={onLogin}
-                        className="underline"
-                    >
-                        Log In
-                    </button>
                 </div>
-            </div>
-        </div>
+
+                <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#505261] rounded-full px-5.5 py-3 text-[#A9A9A9] font-extrabold text-[14px] disabled:opacity-50"
+                >
+                    {isSubmitting ? "Signing up..." : "Sign up"}
+                </button>
+            </form>
+            <AuthFooter
+                text="Already have an account?"
+                action="Log in"
+                onClick={onLogin}
+            />
+        </AuthModal>
     );
 }

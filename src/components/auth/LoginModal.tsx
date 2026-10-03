@@ -1,10 +1,12 @@
-
 "use client";
 
 import { login } from "@/lib/api/auth";
 import { useAuth } from "@/providers/auth-provider";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AuthModal } from "./AuthModal";
+import { AuthInput } from "./AuthInput";
+import { AuthFooter } from "./AuthFooter";
 
 interface LoginFormData {
   email: string;
@@ -21,7 +23,7 @@ export function LoginModal({ onClose, onSignUp }: LoginModalProps) {
   const { setAuth } = useAuth()
   const [serverError, setServerError] = useState("");
 
-  const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginFormData>()
+  const { register, handleSubmit, setError, formState: { errors, touchedFields, isSubmitting } } = useForm<LoginFormData>({ mode: "onBlur", })
 
   async function onSubmit(data: LoginFormData) {
     setServerError("")
@@ -45,7 +47,9 @@ export function LoginModal({ onClose, onSignUp }: LoginModalProps) {
       }
 
       if (response.status === 401) {
-        setServerError("Invalid Credentials")
+        setServerError(
+          response?.data?.message || "Invalid credentials"
+        );
         return
       }
 
@@ -55,99 +59,69 @@ export function LoginModal({ onClose, onSignUp }: LoginModalProps) {
 
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      onClick={onClose}
+    <AuthModal
+      title="Log In"
+      subtitle="Welcome back to Kino XII"
+      onClose={onClose}
     >
-      <div
-        className="w-full max-w-md p-6"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Log In</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6">
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="text-2xl"
-          >
-            ×
-          </button>
+          <AuthInput
+            id="login-email"
+            label="Email"
+            type="email"
+            placeholder="example@gmail.com"
+            registration={register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: "Please enter a valid email address",
+              },
+            })}
+            error={errors.email?.message}
+            valid={touchedFields.email && !errors.email}
+          />
+
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label htmlFor="login-email">Email</label>
+        <div className="flex flex-col gap-2.5 font-semibold">
 
-            <input
-              id="login-email"
-              type="email"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^\S+@\S+\.\S+$/,
-                  message: "Please enter a valid email address",
-                },
-              })}
-              className="mt-1 w-full rounded border px-3 py-2"
-            />
+          <AuthInput
+            id="login-password"
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            registration={register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 3,
+                message: "Password must be at least 3 characters",
+              },
+            })}
+            error={errors.password?.message}
+            valid={touchedFields.password && !errors.password}
+          />
 
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="login-password">Password</label>
-
-            <input
-              id="login-password"
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 3,
-                  message: "Password must be at least 3 characters",
-                },
-              })}
-              className="mt-1 w-full rounded border px-3 py-2"
-            />
-
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          {serverError && (
-            <p className="text-sm text-red-500">{serverError}</p>
-          )}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded bg-black px-4 py-2 text-white disabled:opacity-50"
-          >
-            {isSubmitting ? "Logging in..." : "Log In"}
-          </button>
-        </form>
-
-        <div className="mt-4 text-center text-sm">
-          <span>Don't have an account? </span>
-
-          <button
-            type="button"
-            onClick={onSignUp}
-            className="underline"
-          >
-            Sign Up
-          </button>
         </div>
-      </div>
-    </div>
+
+        {serverError && (
+          <p className="text-sm text-red-500">{serverError}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-[#505261] rounded-full px-5.5 py-3.5 text-[#A9A9A9] font-extrabold text-[14px] disabled:opacity-50"
+        >
+          {isSubmitting ? "Logging in..." : "Log in"}
+        </button>
+      </form>
+      <AuthFooter
+        text="Don't have an account?"
+        action="Sign Up"
+        onClick={onSignUp}
+      />
+    </AuthModal>
   );
 }

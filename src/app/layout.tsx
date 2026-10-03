@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
+import { Archivo } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Cinema Booking",
   description: "Cinema booking application",
 };
+
+const archivo = Archivo({
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
@@ -15,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={archivo.className}>
         <QueryProvider>
           <AuthProvider>
             {children}
