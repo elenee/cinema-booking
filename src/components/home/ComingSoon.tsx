@@ -9,7 +9,7 @@ interface ComingSoonProps {
 export function ComingSoon({ movies }: ComingSoonProps) {
     return (
 
-        <section className="border-t border-white/10 bg-[#070C1C] px-17.5 py-10 flex flex-col gap-6">
+        <section className="border-t border-[#2A2C3D] bg-[#070C1C] px-17.5 py-10 flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-extrabold uppercase text-white">
                     Coming Soon...

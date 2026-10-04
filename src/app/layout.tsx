@@ -3,6 +3,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import { Archivo } from "next/font/google";
+import { Footer } from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Cinema Booking",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             {children}
+            <Footer />
           </AuthProvider>
         </QueryProvider>
       </body>
