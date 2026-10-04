@@ -1,14 +1,13 @@
+import { Hero } from "@/components/home/Hero";
 import { Navbar } from "@/components/layout/navbar";
+import { getFeaturedMovies } from "@/lib/api/movies";
 
-export default function Home() {
+export default async function Home() {
+  const movies = await getFeaturedMovies()
 
   return (
     <main>
-      <Navbar />
-
-      <main>
-        <h1>Cinema Booking</h1>
-      </main>
+      <Hero movies={movies} />
     </main>
   );
 }

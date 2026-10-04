@@ -80,3 +80,29 @@ export interface AuthResponse {
   user: User;
   token: string;
 }
+
+
+export interface Genre {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface Movie {
+  id: number;
+  slug: string;
+  title: string;
+  kind: string;
+  runtimeMinutes: number;
+  posterUrl: string;
+  backdropUrl: string;
+  releaseDate: string;
+  isComingSoon: boolean;
+  isNotified: boolean;
+  isFeatured: boolean;
+  fromPrice: number;
+  ageRating: AgeRating;
+  genres: Genre[];
+  formats: Format[];
+  synopsis: string;
+}
