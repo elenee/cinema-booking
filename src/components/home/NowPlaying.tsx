@@ -8,7 +8,7 @@ interface NowPlayingProps {
 
 export function NowPlaying({ movies }: NowPlayingProps) {
     return (
-        <section className="bg-[#070C1C] px-17.5 py-8 flex flex-col gap-6">
+        <section className="bg-[#070C1C] px-17.5 pt-8 pb-10 flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-extrabold uppercase text-white">
                     Now Playing

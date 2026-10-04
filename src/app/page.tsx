@@ -1,18 +1,20 @@
+import { ComingSoon } from "@/components/home/ComingSoon";
 import { Hero } from "@/components/home/Hero";
 import { NowPlaying } from "@/components/home/NowPlaying";
-import { Navbar } from "@/components/layout/navbar";
-import { getFeaturedMovies, getNowPlayingMovies } from "@/lib/api/movies";
+import { getComingSoonMovies, getFeaturedMovies, getNowPlayingMovies } from "@/lib/api/movies";
 
 export default async function Home() {
-  const [featuredMovies, nowPlayingMovies] = await Promise.all([
+  const [featuredMovies, nowPlayingMovies, comingSoonMovies] = await Promise.all([
     getFeaturedMovies(),
     getNowPlayingMovies(),
+    getComingSoonMovies()
   ]);
 
   return (
     <main>
       <Hero movies={featuredMovies} />
       <NowPlaying movies={nowPlayingMovies} />
+      <ComingSoon movies={comingSoonMovies} />
     </main>
   );
 }

@@ -125,7 +125,7 @@ export function Hero({ movies }: HeroProps) {
                                     className="group flex-1 py-2"
                                 >
                                     <span
-                                        className={`block h-0.5 w-full rounded-full transition-colors ${index === activeIndex
+                                        className={`block h-0.75 w-full rounded-full transition-colors ${index === activeIndex
                                             ? "bg-[#EE3A1A]"
                                             : "bg-white group-hover:bg-white/70"
                                             }`}
