@@ -125,7 +125,7 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
                     className="flex cursor-pointer gap-3"
                     onClick={() => avatarInputRef.current?.click()}
                 >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#2A2C3D]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-border">
                         {avatarPreview ? (
                             <img
                                 src={avatarPreview}
@@ -149,12 +149,12 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
                                 event.stopPropagation();
                                 avatarInputRef.current?.click();
                             }}
-                            className="text-left text-[14px] font-extrabold text-white"
+                            className="text-left text-button text-white"
                         >
                             {avatarPreview ? "Change avatar" : "Upload avatar (optional)"}
                         </button>
 
-                        <p className="text-[12px] text-[#A9A9A9]">
+                        <p className="text-body-s text-text-muted">
                             JPG, PNG or WEBP
                         </p>
                     </div>
@@ -172,7 +172,7 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
                 </div>
 
                 {errors.avatar && (
-                    <p className="text-sm text-[#EC3013]">
+                    <p className="text-label-s text-primary">
                         {errors.avatar.message}
                     </p>
                 )}
@@ -247,7 +247,7 @@ export function RegisterModal({ onClose, onLogin }: RegisterModalProps) {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#505261] rounded-full px-5.5 py-3 text-[#A9A9A9] font-extrabold text-[14px] disabled:opacity-50"
+                    className="w-full bg-text-disabled rounded-full px-5.5 py-3 text-text-muted text-button disabled:opacity-50"
                 >
                     {isSubmitting ? "Signing up..." : "Sign up"}
                 </button>

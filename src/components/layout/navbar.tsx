@@ -12,7 +12,7 @@ export function Navbar() {
         <>
             <nav className="flex items-center justify-between px-15 py-10">
                 <div className="flex gap-9 items-center text-white ">
-                    <h1 className="uppercase font-extrabold text-[20px]">kino <span className="text-[#EC3013]">xii</span></h1>
+                    <h1 className="uppercase font-extrabold text-[20px]">kino <span className="text-primary">xii</span></h1>
                     <p className="uppercase text-[12px] font-semibold">Sessions</p>
                 </div>
                 <div className="flex gap-8">
@@ -28,7 +28,7 @@ export function Navbar() {
                     <div className="flex gap-3">
                         <button type="button"
                             onClick={() => setAuthModal('register')}
-                            className="bg-[#EC3013] rounded-full text-white px-5.5 py-3.5 text-[14px] font-extrabold"
+                            className="bg-primary transition hover:bg-primary-hover rounded-full text-white px-5.5 py-3.5 text-[14px] font-extrabold"
                         >
                             Sign Up
                         </button>

@@ -20,7 +20,7 @@ function formatPremiereDate(date: string) {
 }
 
 const pill =
-    "inline-flex h-6 items-center gap-1.5 rounded-full bg-white/10 px-2.5 text-[11px] font-bold uppercase text-white";
+    "inline-flex h-6 items-center gap-1.5 rounded-full bg-white/10 px-2.5 text-label-s font-bold uppercase text-white";
 
 export function Hero({ movies }: HeroProps) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -49,23 +49,22 @@ export function Hero({ movies }: HeroProps) {
                     priority
                     className="object-cover"
                 />
-
-                <div className="absolute inset-0 bg-linear-to-r from-[#070C1C]/90 via-[#070C1C]/40 to-transparent" />
-                <div className="absolute inset-0 bg-linear-to-t from-[#070C1C] via-transparent to-[#070C1C]/60" />
+                <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-background/60" />
 
                 <div className="relative z-10 flex h-full flex-col justify-end px-16.75 pb-14">
                     <div className="max-w-137.5 flex flex-col gap-5">
                         <div className="flex flex-col gap-3.75 items-start">
-                            <span className="inline-flex items-center rounded-full bg-[#EE3A1A]/15 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#EE3A1A]">
+                            <span className="inline-flex items-center rounded-full bg-primary/15 px-2.5 py-1.5 text-label-s uppercase text-primary">
                                 Premiere · Week of {formatPremiereDate(movie.releaseDate)}
                             </span>
 
-                            <h1 className="text-4xl font-extrabold uppercase leading-tight text-white">
+                            <h1 className="text-display font-extrabold uppercase leading-tight text-white">
                                 {movie.title}
                             </h1>
 
                             <div className="flex flex-wrap items-center gap-2">
-                                <span className="inline-flex h-6 items-center rounded-full bg-[#EE3A1A]/15 px-1.5 py-3 text-[12px] font-bold text-[#EE3A1A]">
+                                <span className="inline-flex h-6 items-center rounded-full bg-primary/15 px-1.5 py-3 text-label-s text-primary">
                                     {movie.ageRating.code}
                                 </span>
 
@@ -86,7 +85,7 @@ export function Hero({ movies }: HeroProps) {
                                 ))}
                             </div>
 
-                            <p className="line-clamp-3 max-w-125 text-xs leading-5 text-white">
+                            <p className="line-clamp-3 max-w-125 text-body-m leading-5 text-white">
                                 {movie.synopsis}
                             </p>
                         </div>
@@ -94,7 +93,7 @@ export function Hero({ movies }: HeroProps) {
                         <div className="flex items-center gap-3">
                             <button
                                 type="button"
-                                className="appearance-none border-0 outline-none inline-flex h-10 items-center gap-2 rounded-full bg-[#EE3A1A] px-5.5 py-3.25 text-xs font-extrabold text-white transition hover:bg-[#d83214]"
+                                className="appearance-none border-0 outline-none inline-flex h-10 items-center gap-2 rounded-full bg-primary px-5.5 py-3.25 text-button text-white transition hover:bg-primary-hover"
                             >
                                 <Image
                                     src="/icons/ticket.svg"
@@ -107,7 +106,7 @@ export function Hero({ movies }: HeroProps) {
 
                             <button
                                 type="button"
-                                className="appearance-none border-0 outline-none inline-flex h-10 items-center rounded-full bg-white/10 px-5.5 py-3.25 text-xs font-extrabold text-white backdrop-blur transition hover:bg-white/20"
+                                className="appearance-none border-0 outline-none inline-flex h-10 items-center rounded-full bg-white/10 px-5.5 py-3.25 text-button text-white transition hover:bg-white/30 "
                             >
                                 All sessions
                             </button>
@@ -126,7 +125,7 @@ export function Hero({ movies }: HeroProps) {
                                 >
                                     <span
                                         className={`block h-0.75 w-full rounded-full transition-colors ${index === activeIndex
-                                            ? "bg-[#EE3A1A]"
+                                            ? "bg-primary"
                                             : "bg-white group-hover:bg-white/70"
                                             }`}
                                     />

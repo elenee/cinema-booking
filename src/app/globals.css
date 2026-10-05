@@ -1,1 +1,90 @@
 @import "tailwindcss";
+
+@theme {
+    --color-background: #070C1C;
+    --color-surface: #1E2031;
+    --color-border: #2A2C3D;
+
+    --color-white: #FFFFFF;
+    --color-text-muted: #A9A9A9;
+    --color-text-disabled: #505261;
+
+    --color-primary: #EC3013;
+    --color-success: #4ADE80;
+    --color-warning: #E27E04;
+
+    --color-white-tint: rgb(255 255 255 / 10%);
+    --color-primary-tint: rgb(236 48 19 / 10%);
+    --color-success-tint: rgb(74 222 128 / 10%);
+
+    --color-primary-hover: #EA5038
+}
+
+
+@utility text-display {
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+@utility text-h1 {
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+@utility text-h2 {
+    font-size: 20px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+@utility text-h3 {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+@utility text-button {
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+@utility text-label-m {
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+@utility text-label-s {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+@utility text-overline {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+@utility text-body-l {
+    font-size: 16px;
+    line-height: 130%;
+    font-weight: 400;
+}
+
+@utility text-body-m {
+    font-size: 14px;
+    line-height: 130%;
+    font-weight: 400;
+}
+
+@utility text-body-s {
+    font-size: 12px;
+    line-height: 130%;
+    font-weight: 400;
+}

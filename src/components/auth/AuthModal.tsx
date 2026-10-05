@@ -20,13 +20,13 @@ export function AuthModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md p-8 flex flex-col gap-6 bg-[#070C1C] border border-[#2A2C3D] rounded-[28px] text-white"
+        className="w-full max-w-md p-8 flex flex-col gap-6 bg-background border border-border rounded-[28px] text-white"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex items-baseline justify-between">
           <div className="flex flex-col gap-2">
-            <h2 className="text-[20px] font-extrabold">{title}</h2>
-            <p className="text-[12px] text-[#A9A9A9]">{subtitle}</p>
+            <h2 className="text-h2">{title}</h2>
+            <p className="text-body-s text-text-muted">{subtitle}</p>
           </div>
 
           <button

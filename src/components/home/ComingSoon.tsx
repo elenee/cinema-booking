@@ -9,13 +9,13 @@ interface ComingSoonProps {
 export function ComingSoon({ movies }: ComingSoonProps) {
     return (
 
-        <section className="border-t border-[#2A2C3D] bg-[#070C1C] px-17.5 py-10 flex flex-col gap-6">
+        <section className="border-t border-bg-border bg-background px-17.5 py-10 flex flex-col gap-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-extrabold uppercase text-white">
+                <h1 className="text-h1 uppercase text-white">
                     Coming Soon...
                 </h1>
                 <Link href="/coming-soon"
-                    className="text-sm font-semibold text-[#EC3013] transition hover:text-[#ff5a3c]">
+                    className="text-label-m text-primary transition hover:text-primary-hover">
                     See all
                 </Link>
             </div>

@@ -106,13 +106,13 @@ export function LoginModal({ onClose, onSignUp }: LoginModalProps) {
         </div>
 
         {serverError && (
-          <p className="text-sm text-red-500">{serverError}</p>
+          <p className="text-label-s text-red-500">{serverError}</p>
         )}
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-[#505261] rounded-full px-5.5 py-3.5 text-[#A9A9A9] font-extrabold text-[14px] disabled:opacity-50"
+          className="w-full bg-text-disabled rounded-full px-5.5 py-3.5 text-text-muted text-button disabled:opacity-50"
         >
           {isSubmitting ? "Logging in..." : "Log in"}
         </button>

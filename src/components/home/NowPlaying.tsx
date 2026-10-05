@@ -8,13 +8,13 @@ interface NowPlayingProps {
 
 export function NowPlaying({ movies }: NowPlayingProps) {
     return (
-        <section className="bg-[#070C1C] px-17.5 pt-8 pb-10 flex flex-col gap-6">
+        <section className="bg-background px-17.5 pt-8 pb-10 flex flex-col gap-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-extrabold uppercase text-white">
+                <h1 className="text-h1 uppercase text-white">
                     Now Playing
                 </h1>
                 <Link href="/sessions"
-                    className="text-sm font-semibold text-[#EC3013] transition hover:text-[#ff5a3c]">
+                    className="text-label-m text-primary transition hover:text-primary-hover">
                     See all
                 </Link>
             </div>
