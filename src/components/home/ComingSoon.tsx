@@ -1,5 +1,5 @@
 import type { Movie } from "@/lib/api/types";
-import { ComingSoonCard } from "./ComingSoonCard";
+import { ComingSoonCard } from "../movie/ComingSoonCard";
 import Link from "next/link";
 
 interface ComingSoonProps {

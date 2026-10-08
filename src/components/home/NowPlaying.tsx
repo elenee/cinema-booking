@@ -1,5 +1,5 @@
 import type { Movie } from "@/lib/api/types";
-import { MovieCard } from "./MovieCard";
+import { MovieCard } from "../movie/MovieCard";
 import Link from "next/link";
 
 interface NowPlayingProps {
