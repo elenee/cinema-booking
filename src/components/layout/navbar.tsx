@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LoginModal } from "../auth/LoginModal";
 import { RegisterModal } from "../auth/RegisterModal";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Navbar() {
     const [authModal, setAuthModal] = useState<"login" | "register" | null>(null,);
@@ -13,7 +14,9 @@ export function Navbar() {
             <nav className="flex items-center justify-between px-15 py-10">
                 <div className="flex gap-9 items-center text-white ">
                     <h1 className="uppercase font-extrabold text-[20px]">kino <span className="text-primary">xii</span></h1>
-                    <p className="uppercase text-[12px] font-semibold">Sessions</p>
+                    <Link href="/sessions" className="text-white hover:text-primary transition">
+                        Sessions
+                    </Link>
                 </div>
                 <div className="flex gap-8">
                     <div className="flex items-center gap-1 bg-white/10 rounded-full pl-4 py-1.5 pr-44 ">

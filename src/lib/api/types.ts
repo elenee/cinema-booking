@@ -136,6 +136,7 @@ export interface MovieSession {
   seatsLeft: number;
   isSoldOut: boolean;
   hall: { id: number; name: string };
+  venue: Venue;
   format: Format;
   language: Language;
 }

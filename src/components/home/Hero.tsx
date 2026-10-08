@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { Movie } from "@/lib/api/types";
 import { Navbar } from "@/components/layout/navbar";
+import Link from "next/link";
 
 interface HeroProps {
     movies: Movie[];
@@ -103,13 +104,7 @@ export function Hero({ movies }: HeroProps) {
                                 />
                                 Buy tickets
                             </button>
-
-                            <button
-                                type="button"
-                                className="appearance-none border-0 outline-none inline-flex h-10 items-center rounded-full bg-white/10 px-5.5 py-3.25 text-button text-white transition hover:bg-white/30 "
-                            >
-                                All sessions
-                            </button>
+                            <Link href="/sessions" className="appearance-none border-0 outline-none inline-flex h-10 items-center rounded-full bg-white/10 px-5.5 py-3.25 text-button text-white transition hover:bg-white/30 ">All sessions</Link>
                         </div>
                     </div>
 
