@@ -144,3 +144,23 @@ export interface VenueSessions {
   venue: Venue;
   sessions: MovieSession[];
 }
+
+
+export interface SessionsGroup {
+    movie: Movie;
+    sessions: MovieSession[];
+}
+
+export interface SessionsMeta {
+    currentPage: number;
+    lastPage: number;
+    perPage: number;
+    totalSessions: number;
+    totalMovies: number;
+    date: string;
+}
+
+export interface SessionsResponse {
+    data: SessionsGroup[];
+    meta: SessionsMeta;
+}
