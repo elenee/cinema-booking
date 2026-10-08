@@ -106,3 +106,41 @@ export interface Movie {
   formats: Format[];
   synopsis: string;
 }
+
+export interface MovieDetail extends Movie {
+  director: string;
+  cast: string;
+}
+
+export interface Language {
+  id: number;
+  slug: string;
+  name: string;
+  code: string;
+}
+
+export interface Venue {
+  id: number;
+  slug: string;
+  name: string;
+  city: string;
+}
+
+export interface MovieSession {
+  id: number;
+  startsAt: string;
+  date: string;
+  time: string;
+  timeBand: string;
+  price: number;
+  seatsLeft: number;
+  isSoldOut: boolean;
+  hall: { id: number; name: string };
+  format: Format;
+  language: Language;
+}
+
+export interface VenueSessions {
+  venue: Venue;
+  sessions: MovieSession[];
+}
