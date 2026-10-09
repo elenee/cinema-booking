@@ -39,7 +39,20 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
     console.log(JSON.stringify(venues[0], null, 2));
 
     const days = getNextSevenDays();
-    const selectedDayTotal = venues.flatMap((v) => v.sessions).length;
+
+    const now = new Date();
+    const isToday = selectedDate === days[0].key;
+
+    const visibleVenues = venues
+        .map(({ venue, sessions }) => ({
+            venue,
+            sessions: isToday
+                ? sessions.filter((s) => new Date(s.startsAt) > now)
+                : sessions,
+        }))
+        .filter(({ sessions }) => sessions.length > 0);
+
+    const selectedDayTotal = visibleVenues.length;
 
     return (
         <section>
@@ -54,8 +67,8 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
                         key={d.key}
                         href={`/movies/${slug}?date=${d.key}`}
                         scroll={false}
-                        className={`flex h-20 w-20 flex-col items-center justify-center rounded-2xl text-[10px] font-bold transition ${d.key === selectedDate
-                            ? "bg-[#EE3A1A] text-white"
+                        className={`flex h-20 w-20 flex-col items-center justify-center rounded-2xl text-[10px] font-bold transition-[width,background-color] duration-300 ease-out ${d.key === selectedDate
+                            ? "bg-[#EE3A1A] text-white w-27.25"
                             : "bg-white/10 text-white hover:bg-white/20"
                             }`}
                     >
@@ -66,7 +79,7 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
             </div>
 
             <div className="mt-6.75 flex flex-col gap-6">
-                {venues.map(({ venue, sessions }) => (
+                {visibleVenues.map(({ venue, sessions }) => (
                     <div key={venue.id}>
                         <h3 className="mb-3 text-button font-bold text-white">
                             {venue.name}
@@ -76,7 +89,7 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
                             {[...groupByHall(sessions)].map(([hallName, hallSessions]) => (
                                 <div
                                     key={hallName}
-                                    className="rounded-2xl bg-white/10 p-3.75"
+                                    className="rounded-2xl bg-surface p-3.75"
                                 >
                                     <p className="text-label-s mb-2.25 text-white">
                                         Hall {hallName}
@@ -96,8 +109,8 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
                 ))}
 
                 {selectedDayTotal === 0 && (
-                    <p className="text-xs text-text-muted">
-                        No sessions on this day.
+                    <p className="text-body-s text-text-muted">
+                        No sessions on this day. Try another date.
                     </p>
                 )}
             </div>

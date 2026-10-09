@@ -22,13 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={archivo.className}>
+      <body className={`${archivo.className} flex min-h-screen flex-col bg-background`}>
         <QueryProvider>
           <AuthProvider>
             <div className="absolute inset-x-0 top-0 z-50">
               <Navbar />
             </div>
-            {children}
+            <div className="flex-1">{children}</div>
             <Footer />
           </AuthProvider>
         </QueryProvider>

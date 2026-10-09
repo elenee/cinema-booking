@@ -6,7 +6,7 @@ interface MovieHeroProps {
 }
 
 const pill =
-    "inline-flex h-6 items-center gap-1.5 rounded-full bg-white/10 px-2.5 text-[11px] font-bold uppercase text-white";
+    "inline-flex px-2.5 py-1.5 items-center gap-1.5 rounded-full bg-white/10 px-2.5 text-label-s uppercase text-white";
 
 export function MovieHero({ movie }: MovieHeroProps) {
     return (
@@ -19,8 +19,6 @@ export function MovieHero({ movie }: MovieHeroProps) {
                     priority
                     className="object-cover"
                 />
-
-
                 <div className="relative z-10 flex h-full items-end gap-8">
                     <div className="relative h-90 w-60 shrink-0 overflow-hidden rounded-2xl">
                         <Image
@@ -43,7 +41,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
                         </p>
 
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="inline-flex h-6 items-center rounded-full bg-[#EE3A1A]/15 px-2.5 text-[11px] font-bold text-[#EE3A1A]">
+                            <span className="inline-flex h-6 items-center rounded-full bg-primary/15 px-2.5 text-label-s font-bold text-primary">
                                 {movie.ageRating.code}
                             </span>
 

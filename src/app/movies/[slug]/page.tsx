@@ -68,7 +68,7 @@ export default async function MoviePage({
         <main className="bg-background">
             <MovieHero movie={movie} />
 
-            <div className="grid grid-cols-[1fr_350px] px-12.75 py-8">
+            <div className="grid grid-cols-1 gap-10 px-12.75 py-8 lg:grid-cols-[minmax(0,1fr)_350px]">
                 <MovieSessions
                     slug={slug}
                     venues={selectedDayVenues}
