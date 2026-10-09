@@ -2,6 +2,7 @@ import { getSessions } from "@/lib/api/sessions";
 import { SessionMovieRow } from "@/components/sessions/SessionMovieRow";
 import { SessionsSidebar } from "@/components/sessions/SessionsSidebar";
 import { getFilterOptions } from "@/lib/api/filter-options";
+import { SessionsSort } from "@/components/sessions/SessionsSort";
 
 type SearchParamValue = string | string[] | undefined;
 
@@ -61,7 +62,7 @@ export default async function SessionsPage({
             languages: toArray(languages),
             bands: toArray(bands),
             search,
-            sort,
+            sort: sort ?? "time_asc",
             page: page ? Number(page) : 1,
         }),
         getFilterOptions(),
@@ -84,6 +85,8 @@ export default async function SessionsPage({
                         <span className="text-sm font-semibold text-white">
                             Showing {response.meta.totalSessions} sessions
                         </span>
+
+                        <SessionsSort sort={sort ?? "time_asc"} />
                     </div>
 
                     <div>
