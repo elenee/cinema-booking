@@ -4,6 +4,7 @@ import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import { Archivo } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
+import { Navbar } from "@/components/layout/Navbar";
 
 export const metadata: Metadata = {
   title: "Cinema Booking",
@@ -24,6 +25,9 @@ export default function RootLayout({
       <body className={archivo.className}>
         <QueryProvider>
           <AuthProvider>
+            <div className="absolute inset-x-0 top-0 z-50">
+              <Navbar />
+            </div>
             {children}
             <Footer />
           </AuthProvider>

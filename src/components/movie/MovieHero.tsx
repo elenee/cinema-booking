@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { Movie } from "@/lib/api/types";
-import { Navbar } from "@/components/layout/navbar";
 
 interface MovieHeroProps {
     movie: Movie;
@@ -67,10 +66,6 @@ export function MovieHero({ movie }: MovieHeroProps) {
                     </div>
                 </div>
             </section>
-
-            <div className="absolute top-0 left-0 right-0 z-20">
-                <Navbar />
-            </div>
         </div>
     );
 }

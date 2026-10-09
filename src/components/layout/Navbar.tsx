@@ -11,9 +11,9 @@ export function Navbar() {
 
     return (
         <>
-            <nav className="flex items-center justify-between px-15 py-10">
+            <nav className="relative z-10 flex items-center justify-between px-15 py-10 bg-linear-to-b from-background/80 to-transparent">
                 <div className="flex gap-9 items-center text-white ">
-                    <h1 className="uppercase font-extrabold text-[20px]">kino <span className="text-primary">xii</span></h1>
+                    <Link href={'/'} className="uppercase font-extrabold text-[20px]">kino <span className="text-primary">xii</span></Link>
                     <Link href="/sessions" className="text-white hover:text-primary transition">
                         Sessions
                     </Link>

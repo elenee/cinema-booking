@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { Movie } from "@/lib/api/types";
-import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
 
 interface HeroProps {
@@ -50,8 +49,9 @@ export function Hero({ movies }: HeroProps) {
                     priority
                     className="object-cover"
                 />
-                <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/40 to-transparent" />
-                <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-background/60" />
+                <div className="absolute inset-0 bg-linear-to-r from-background/90 via-background/50 to-background/30" />
+                <div className="absolute inset-0 bg-linear-to-t from-background via-background/5 to-background/60" />
+                <div className="absolute inset-0 bg-amber-700/15 mix-blend-soft-light" />
 
                 <div className="relative z-10 flex h-full flex-col justify-end px-16.75 pb-14">
                     <div className="max-w-137.5 flex flex-col gap-5">
@@ -159,10 +159,6 @@ export function Hero({ movies }: HeroProps) {
                     </div>
                 </div>
             </section>
-
-            <div className="absolute top-0 left-0 right-0 z-20">
-                <Navbar />
-            </div>
         </div>
     );
 }
