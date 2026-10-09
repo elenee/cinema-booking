@@ -5,42 +5,61 @@ interface SessionCardProps {
 }
 
 export function SessionCard({ session }: SessionCardProps) {
+
+    const hasStarted = new Date(session.startsAt) <= new Date();
+    const isUnavailable = session.isSoldOut || hasStarted;
     return (
         <button
             type="button"
-            disabled={session.isSoldOut}
-            className="flex min-w-65 overflow-hidden rounded-xl bg-background text-white transition hover:ring-1 hover:ring-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isUnavailable}
+            className={`flex shrink-0 flex-col gap-3 p-3.75 min-w-65 overflow-hidden rounded-2xl bg-surface text-white ${isUnavailable
+                ? "cursor-not-allowed opacity-40"
+                : "cursor-pointer"
+                }`}
         >
-            <div className="flex flex-1 flex-col items-start justify-center gap-1 px-5 py-3">
-                <span className="text-sm font-bold">
+            <div className="flex justify-between">
+                <span className="text-h3">
                     {session.time}
                 </span>
-
-                <div className="flex items-center gap-1.5 text-[9px] text-text-muted">
-                    <span className="uppercase">
-                        {session.language.code}
-                    </span>
-
-                    <span className="rounded-full bg-white/10 px-2 py-0.5 font-bold uppercase text-white">
-                        {session.format.name}
-                    </span>
-                </div>
-
-                <span className="text-[10px] text-text-muted">
-                    {session.venue.name} · Hall {session.hall.name}
+                <span className="rounded-full bg-border px-2.5 py-1.25 text-label-s text-white">
+                    {session.format.name}
                 </span>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-1 border-l border-dashed border-white/30 px-4">
-                <span className="text-sm font-bold text-[#EE3A1A]">
-                    ₾ {session.price}
-                </span>
+            <div className="flex flex-col gap-2.5">
+                <div className="flex justify-between items-center">
+                    <span className="text-body-s text-text-muted">
+                        {session.language.code}
+                    </span>
 
-                <span className="text-[9px] text-text-muted">
-                    {session.isSoldOut
-                        ? "Sold out"
-                        : `${session.seatsLeft} left`}
-                </span>
+                    {hasStarted ? (
+                        <span className="text-label-s text-text-muted">
+                            Started
+                        </span>
+                    ) : session.isSoldOut ? (
+                        <span className="text-label-s text-primary">
+                            Sold out
+                        </span>
+                    ) : (
+                        <span
+                            className={`text-label-s ${session.seatsLeft <= 5
+                                ? "text-primary"
+                                : "text-green-500"
+                                }`}
+                        >
+                            {session.seatsLeft} left
+                        </span>
+                    )}
+
+                </div>
+                <div className="flex justify-between items-center">
+                    <span className="text-label-s text-white">
+                        {session.venue.name} · Hall {session.hall.name}
+                    </span>
+                    <span className="text-button text-white">
+                        ₾ {session.price}
+                    </span>
+                </div>
             </div>
         </button>
     );

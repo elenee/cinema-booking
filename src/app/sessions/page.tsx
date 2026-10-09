@@ -3,6 +3,7 @@ import { SessionMovieRow } from "@/components/sessions/SessionMovieRow";
 import { SessionsSidebar } from "@/components/sessions/SessionsSidebar";
 import { getFilterOptions } from "@/lib/api/filter-options";
 import { SessionsSort } from "@/components/sessions/SessionsSort";
+import { SessionsPagination } from "@/components/sessions/SessionsPagination";
 
 type SearchParamValue = string | string[] | undefined;
 
@@ -89,14 +90,16 @@ export default async function SessionsPage({
                         <SessionsSort sort={sort ?? "time_asc"} />
                     </div>
 
-                    <div>
-                        {response.data.map((group) => (
-                            <SessionMovieRow
-                                key={group.movie.id}
-                                group={group}
-                            />
+                    <div className="divide-y divide-border">
+                        {response.data.slice(0,4).map((group) => (
+                            <SessionMovieRow key={group.movie.id} group={group} />
                         ))}
                     </div>
+
+                    <SessionsPagination
+                        currentPage={response.meta.currentPage}
+                        lastPage={response.meta.lastPage}
+                    />
                 </section>
             </div>
         </main>
