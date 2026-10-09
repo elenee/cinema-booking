@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 interface SessionsDateSelectorProps {
     selectedDate: string;
@@ -51,6 +52,7 @@ export function SessionsDateSelector({
     selectedDate,
 }: SessionsDateSelectorProps) {
     const dates = getNextSevenDates();
+    const searchParams = useSearchParams();
 
     return (
         <div className="border-b border-border pb-6 flex flex-col gap-3">
@@ -65,7 +67,12 @@ export function SessionsDateSelector({
                     return (
                         <Link
                             key={date.value}
-                            href={`/sessions?date=${date.value}`}
+                            href={`/sessions?${(() => {
+                                const params = new URLSearchParams(searchParams.toString());
+                                params.set("date", date.value);
+                                params.delete("page");
+                                return params.toString();
+                            })()}`}
                             aria-current={isSelected ? "date" : undefined}
                             className={`shrink-0 flex flex-col justify-center items-center w-9.25 h-13.5 rounded-lg ${isSelected
                                 ? "bg-primary text-white"

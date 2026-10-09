@@ -3,11 +3,24 @@ import { SessionMovieRow } from "@/components/sessions/SessionMovieRow";
 import { SessionsSidebar } from "@/components/sessions/SessionsSidebar";
 import { getFilterOptions } from "@/lib/api/filter-options";
 
+type SearchParamValue = string | string[] | undefined;
+
 interface SessionsPageProps {
     searchParams: Promise<{
         date?: string;
+        venues?: SearchParamValue;
+        formats?: SearchParamValue;
+        languages?: SearchParamValue;
+        bands?: SearchParamValue;
+        search?: string;
+        sort?: string;
         page?: string;
     }>;
+}
+
+function toArray(value: SearchParamValue): string[] | undefined {
+    if (!value) return undefined;
+    return Array.isArray(value) ? value : [value];
 }
 
 function getTodayDateKey() {
@@ -28,21 +41,41 @@ function getTodayDateKey() {
 export default async function SessionsPage({
     searchParams,
 }: SessionsPageProps) {
-    const { date, page } = await searchParams;
+    const {
+        date,
+        venues,
+        formats,
+        languages,
+        bands,
+        search,
+        sort,
+        page,
+    } = await searchParams;
     const selectedDate = date ?? getTodayDateKey();
 
     const [response, filterOptions] = await Promise.all([
         getSessions({
             date: selectedDate,
+            venues: toArray(venues),
+            formats: toArray(formats),
+            languages: toArray(languages),
+            bands: toArray(bands),
+            search,
+            sort,
             page: page ? Number(page) : 1,
         }),
         getFilterOptions(),
     ]);
+
     return (
-        <main className="min-h-screen bg-background px-12.75 py-10 pt-32.5">
-            <h1 className="text-2xl font-extrabold uppercase text-white">
-                Sessions
-            </h1>
+        <main className="min-h-screen bg-background px-12.75 py-10 pt-32.5 flex flex-col gap-9">
+            <div className="flex flex-col gap-1.5">
+                <h1 className="text-2xl font-extrabold uppercase text-white">
+                    Sessions
+                </h1>
+                <p className="text-body-m text-text-muted">Browse showtimes across all venues</p>
+            </div>
+
             <div className="grid grid-cols-[280px_minmax(0,1fr)] items-start gap-8">
                 <SessionsSidebar selectedDate={selectedDate} filterOptions={filterOptions} />
 
