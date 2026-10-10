@@ -3,6 +3,7 @@ import { MovieHero } from "@/components/movie/MovieHero";
 import { getMovieBySlug, getMovieSessions } from "@/lib/api/movies";
 import { MovieSessions } from "@/components/movie/MovieSessions";
 import { MovieDetails } from "@/components/movie/MovieDetails";
+import { TrackRecentlyViewed } from "@/components/movie/TrackRecentlyViewed";
 
 interface MoviePageProps {
     params: Promise<{ slug: string }>;
@@ -67,6 +68,7 @@ export default async function MoviePage({
     return (
         <main className="bg-background">
             <MovieHero movie={movie} />
+            <TrackRecentlyViewed movie={movie} />
 
             <div className="grid grid-cols-1 gap-10 px-12.75 py-8 lg:grid-cols-[minmax(0,1fr)_350px]">
                 <MovieSessions
