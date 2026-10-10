@@ -146,22 +146,70 @@ export interface VenueSessions {
   sessions: MovieSession[];
 }
 
-
 export interface SessionsGroup {
-    movie: Movie;
-    sessions: MovieSession[];
+  movie: Movie;
+  sessions: MovieSession[];
 }
 
 export interface SessionsMeta {
-    currentPage: number;
-    lastPage: number;
-    perPage: number;
-    totalSessions: number;
-    totalMovies: number;
-    date: string;
+  currentPage: number;
+  lastPage: number;
+  perPage: number;
+  totalSessions: number;
+  totalMovies: number;
+  date: string;
 }
 
 export interface SessionsResponse {
-    data: SessionsGroup[];
-    meta: SessionsMeta;
+  data: SessionsGroup[];
+  meta: SessionsMeta;
+}
+
+export interface TicketOrder {
+  id: number;
+  reference: string;
+  status: string;
+  totalPrice: number;
+  paidAt: string | null;
+  refundedAt: string | null;
+  isUpcoming: boolean;
+  isRefundable: boolean;
+  cardLastFour: string | null;
+
+  contact: {
+    fullName: string;
+    email: string;
+    mobileNumber: string;
+  };
+
+  session: MovieSession & {
+    startsAt: string;
+    movie: Pick<
+      Movie,
+      | "id"
+      | "slug"
+      | "title"
+      | "kind"
+      | "runtimeMinutes"
+      | "posterUrl"
+      | "backdropUrl"
+      | "releaseDate"
+      | "isComingSoon"
+      | "isFeatured"
+      | "fromPrice"
+      | "ageRating"
+      | "genres"
+      | "formats"
+    >;
+  };
+
+  tickets: {
+    id: number;
+    seatCode: string;
+    ticketType: {
+      slug: string;
+      name: string;
+    };
+    price: number;
+  }[];
 }

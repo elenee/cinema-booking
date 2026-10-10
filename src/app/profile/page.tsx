@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { ProfileForm } from "@/components/profile/ProfileForm";
-import MyTickets from "@/components/profile/MyTickets";
+import { MyTickets } from "@/components/profile/MyTickets";
 
 export default function ProfilePage() {
     const { user, loading } = useAuth();
