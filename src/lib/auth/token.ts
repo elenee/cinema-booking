@@ -1,13 +1,26 @@
-const TOKEN_KEY = "access_token";
+
+const TOKEN_KEY = "kino-token";
 
 export function getToken() {
-  return localStorage.getItem(TOKEN_KEY);
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem(TOKEN_KEY);
 }
 
 export function setToken(token: string) {
-  localStorage.setItem(TOKEN_KEY, token);
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function removeToken() {
-  localStorage.removeItem(TOKEN_KEY);
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(TOKEN_KEY);
 }

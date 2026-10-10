@@ -8,6 +8,9 @@ interface AuthInputProps {
     error?: string;
     valid?: boolean;
     registration: any;
+    disabled?: boolean;
+    hint?: string;
+    inputClassName?: string;
 }
 
 export function AuthInput({
@@ -18,6 +21,9 @@ export function AuthInput({
     error,
     valid,
     registration,
+    disabled,
+    hint,
+    inputClassName = "",
 }: AuthInputProps) {
     return (
         <div className="flex flex-col gap-2.5 font-semibold">
@@ -30,8 +36,8 @@ export function AuthInput({
                     type={type}
                     placeholder={placeholder}
                     {...registration}
-                    className={`w-full rounded-xl border px-4 py-3 text-label-s text-white placeholder:text-text-muted focus:outline-none focus:ring-0 ${error ? "border-primary" : "border-transparent"
-                        } bg-surface`}
+                    className={`w-full rounded-xl border px-4 py-3 text-label-s text-white placeholder:text-text-muted focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:text-white/60 ${error ? "border-primary" : "border-transparent"
+                        } bg-surface ${inputClassName}`}
                 />
                 {valid && !error && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-success">
@@ -42,11 +48,11 @@ export function AuthInput({
                 )}
             </div>
 
-            {error && (
-                <p className="text-label-s text-red-500">
-                    {error}
-                </p>
+            {hint && !error && (
+                <p className="text-body-s font-normal text-white/60">{hint}</p>
             )}
+
+            {error && <p className="text-label-s text-red-500">{error}</p>}
         </div>
     );
 }
