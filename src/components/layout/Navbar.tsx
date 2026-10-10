@@ -11,7 +11,7 @@ export function Navbar() {
 
     return (
         <>
-            <nav className="relative z-10 flex items-center justify-between bg-linear-to-b from-background/80 to-transparent px-15 py-10">
+            <nav className="sticky top-0 z-10  flex items-center justify-between bg-linear-to-b from-black from-0% via-black/51 via-80% to-black/0 to-100% px-15 py-6">
                 <div className="flex items-center gap-9 text-white">
                     <Link href="/" className="text-[20px] font-extrabold uppercase">
                         kino <span className="text-primary">xii</span>
