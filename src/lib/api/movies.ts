@@ -28,3 +28,11 @@ export async function getMovieSessions(slug: string, date: string) {
   );
   return response.data.data;
 }
+
+export async function searchMovies(query: string) {
+  const response = await api.get<ApiResponse<Movie[]>>("/search", {
+    params: { q: query },
+  });
+
+  return response.data.data;
+}

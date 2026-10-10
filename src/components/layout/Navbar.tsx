@@ -1,42 +1,46 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { LoginModal } from "../auth/LoginModal";
 import { RegisterModal } from "../auth/RegisterModal";
-import Image from "next/image";
-import Link from "next/link";
+import { NavbarSearch } from "./NavbarSearch";
 
 export function Navbar() {
-    const [authModal, setAuthModal] = useState<"login" | "register" | null>(null,);
+    const [authModal, setAuthModal] = useState<"login" | "register" | null>(null);
 
     return (
         <>
-            <nav className="relative z-10 flex items-center justify-between px-15 py-10 bg-linear-to-b from-background/80 to-transparent">
-                <div className="flex gap-9 items-center text-white ">
-                    <Link href={'/'} className="uppercase font-extrabold text-[20px]">kino <span className="text-primary">xii</span></Link>
-                    <Link href="/sessions" className="text-white hover:text-primary transition">
+            <nav className="relative z-10 flex items-center justify-between bg-linear-to-b from-background/80 to-transparent px-15 py-10">
+                <div className="flex items-center gap-9 text-white">
+                    <Link href="/" className="text-[20px] font-extrabold uppercase">
+                        kino <span className="text-primary">xii</span>
+                    </Link>
+
+                    <Link
+                        href="/sessions"
+                        className="text-white transition hover:text-primary"
+                    >
                         Sessions
                     </Link>
                 </div>
+
                 <div className="flex gap-8">
-                    <div className="flex items-center gap-1 bg-white/10 rounded-full pl-4 py-1.5 pr-44 ">
-                        <Image
-                            src="/icons/search-icon.svg"
-                            alt=""
-                            width={14}
-                            height={14}
-                        />
-                        <p className="text-white text-[14px] font-normal">Search films and live events</p>
-                    </div>
+                    <NavbarSearch />
+
                     <div className="flex gap-3">
-                        <button type="button"
-                            onClick={() => setAuthModal('register')}
-                            className="bg-primary transition hover:bg-primary-hover rounded-full text-white px-5.5 py-3.5 text-[14px] font-extrabold"
+                        <button
+                            type="button"
+                            onClick={() => setAuthModal("register")}
+                            className="rounded-full bg-primary px-5.5 py-3.5 text-[14px] font-extrabold text-white transition hover:bg-primary-hover"
                         >
                             Sign Up
                         </button>
-                        <button type="button" onClick={() => setAuthModal('login')}
-                            className="bg-white rounded-full text-black px-5.5 py-3.5 text-[14px] font-extrabold"
+
+                        <button
+                            type="button"
+                            onClick={() => setAuthModal("login")}
+                            className="rounded-full bg-white px-5.5 py-3.5 text-[14px] font-extrabold text-black"
                         >
                             Log In
                         </button>
