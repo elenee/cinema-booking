@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 import { MyTickets } from "@/components/profile/MyTickets";
 
-export default function ProfilePage() {
+function ProfileContent() {
     const { user, loading } = useAuth();
     const router = useRouter();
     const [showLogin, setShowLogin] = useState(true);
@@ -90,5 +90,14 @@ export default function ProfilePage() {
                 )}
             </div>
         </main>
+    );
+}
+
+
+export default function ProfilePage() {
+    return (
+        <Suspense fallback={<p>Loading profile...</p>}>
+            <ProfileContent />
+        </Suspense>
     );
 }
