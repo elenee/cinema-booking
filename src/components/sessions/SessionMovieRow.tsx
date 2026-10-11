@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { SessionsGroup } from "@/lib/api/types";
+import type { Movie, SessionsGroup } from "@/lib/api/types";
 import { SessionCard } from "./SessionCard";
 
 interface SessionMovieRowProps {
@@ -42,6 +42,7 @@ export function SessionMovieRow({ group }: SessionMovieRowProps) {
                     <SessionCard
                         key={session.id}
                         session={session}
+                        movie={movie}
                     />
                 ))}
             </div>

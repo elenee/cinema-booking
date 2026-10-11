@@ -1,16 +1,20 @@
-import type { MovieSession } from "@/lib/api/types";
+"use client"
+import type { Movie, MovieSession } from "@/lib/api/types";
+import { useBooking } from "@/providers/booking-provider";
 
 interface SessionCardProps {
     session: MovieSession;
+    movie: Movie
 }
 
-export function SessionCard({ session }: SessionCardProps) {
-
+export function SessionCard({ session, movie }: SessionCardProps) {
+    const { openBooking } = useBooking();
     const hasStarted = new Date(session.startsAt) <= new Date();
     const isUnavailable = session.isSoldOut || hasStarted;
     return (
         <button
             type="button"
+            onClick={() => openBooking(session, movie.title, movie.ageRating)}
             disabled={isUnavailable}
             className={`flex shrink-0 flex-col gap-3 p-3.75 min-w-65 overflow-hidden rounded-2xl bg-surface text-white ${isUnavailable
                 ? "cursor-not-allowed opacity-40"
