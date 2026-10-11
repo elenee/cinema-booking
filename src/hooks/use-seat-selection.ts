@@ -1,31 +1,151 @@
 import { Seat } from "@/lib/api/booking";
+import type { AgeRating, TicketType } from "@/lib/api/types";
 import { useCallback, useMemo, useState } from "react";
 
-export const MAX_SEATS = 3;
+function isTicketTypeAllowed(
+  blockedFromRatingAge: number | null,
+  ageRating: AgeRating | null | undefined,
+): boolean {
+  if (blockedFromRatingAge === null) return true;
+  if (!ageRating) return false;
+  console.log({
+    "Age Rating":
+    blockedFromRatingAge,
+    ageRating,
+    movieMinAge: ageRating.minAge,
+  });
 
-export const getSeatPrice = (_seat: Seat): number => 0;
+  return ageRating.minAge < blockedFromRatingAge;
+}
 
-export function useSeatSelection() {
+export function getSeatPrice(
+  _seat: Seat,
+  ticketType: TicketType,
+  basePrice: number,
+): number {
+  return Math.round(basePrice * ticketType.priceRatio * 100) / 100;
+}
+
+export function useSeatSelection(
+  ticketTypes: TicketType[],
+  basePrice: number,
+  maxSeats: number,
+) {
   const [selected, setSelected] = useState<Seat[]>([]);
+  const [ticketTypeBySeat, setTicketTypeBySeat] = useState<
+    Record<number, TicketType["slug"]>
+  >({});
+  const [selectionMessage, setSelectionMessage] = useState<string | null>(null);
 
-  const toggleSeat = useCallback((seat: Seat) => {
-    setSelected((prev) => {
-      if (prev.some((s) => s.id === seat.id)) {
-        return prev.filter((s) => s.id !== seat.id);
-      }
-      return prev.length >= MAX_SEATS ? prev : [...prev, seat];
-    });
-  }, []);
+  const defaultTicketType = ticketTypes.find(
+    (type) => type.slug === "adult",
+  );
+
+  const ticketTypesBySlug = useMemo(
+    () => new Map(ticketTypes.map((type) => [type.slug, type])),
+    [ticketTypes],
+  );
 
   const selectedIds = useMemo(
-    () => new Set(selected.map((s) => s.id)),
+    () => new Set(selected.map((seat) => seat.id)),
     [selected],
+  );
+
+  const getTicketTypeForSeat = useCallback(
+    (seat: Seat) => {
+      const slug = ticketTypeBySeat[seat.id];
+      return (
+        (slug ? ticketTypesBySlug.get(slug) : undefined) ??
+        defaultTicketType
+      );
+    },
+    [ticketTypeBySeat, ticketTypesBySlug, defaultTicketType],
+  );
+
+
+  const getPriceForSeat = useCallback(
+    (seat: Seat) => {
+      const ticketType = getTicketTypeForSeat(seat);
+      return ticketType
+        ? getSeatPrice(seat, ticketType, basePrice)
+        : 0;
+    },
+    [getTicketTypeForSeat, basePrice],
   );
 
   const subtotal = useMemo(
-    () => selected.reduce((sum, seat) => sum + getSeatPrice(seat), 0),
-    [selected],
+    () =>
+      selected.reduce(
+        (sum, seat) => sum + getPriceForSeat(seat),
+        0,
+      ),
+    [selected, getPriceForSeat],
   );
 
-  return { selected, selectedIds, toggleSeat, subtotal };
+  const toggleSeat = useCallback(
+    (seat: Seat) => {
+      if (selectedIds.has(seat.id)) {
+        setSelected((prev) => prev.filter((item) => item.id !== seat.id));
+        setTicketTypeBySeat((prev) => {
+          const next = { ...prev };
+          delete next[seat.id];
+          return next;
+        });
+        setSelectionMessage(null);
+        return;
+      }
+
+      if (selected.length >= maxSeats) {
+        setSelectionMessage(`You can select a maximum of ${maxSeats} seats.`);
+        return;
+      }
+
+      if (!defaultTicketType) {
+        setSelectionMessage("Ticket options are still loading.");
+        return;
+      }
+
+      setSelected((prev) => [...prev, seat]);
+      setTicketTypeBySeat((prev) => ({
+        ...prev,
+        [seat.id]: defaultTicketType.slug,
+      }));
+      setSelectionMessage(null);
+    },
+    [selected, selectedIds, maxSeats, defaultTicketType],
+  );
+
+  const setTicketTypeForSeat = useCallback(
+    (seatId: number, slug: TicketType["slug"], ageRating: AgeRating | null) => {
+      const ticketType = ticketTypesBySlug.get(slug);
+
+      if (!ticketType) return;
+
+      if (!isTicketTypeAllowed(ticketType.blockedFromRatingAge, ageRating)) {
+        setSelectionMessage(
+          `${ticketType.name} tickets aren't allowed for this movie's age rating.`,
+        );
+        return;
+      }
+
+      setTicketTypeBySeat(prev => ({ ...prev, [seatId]: slug }));
+      setSelectionMessage(null);
+    },
+    [ticketTypesBySlug],
+  );
+
+
+  return {
+    selected,
+    selectedIds,
+    toggleSeat,
+    subtotal,
+    ticketTypeBySeat,
+    getTicketTypeForSeat,
+    isTicketTypeAllowed,
+    getPriceForSeat,
+    setTicketTypeForSeat,
+    selectionMessage,
+    clearSelectionMessage: () => setSelectionMessage(null),
+  };
 }

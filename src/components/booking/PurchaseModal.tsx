@@ -8,20 +8,22 @@ import { SeatLegend } from "./SeatLegend";
 import { SelectionSummary } from "./SelectionSummary";
 import { useSeatSelection } from "@/hooks/use-seat-selection";
 import { SeatMap } from "./SeatMap";
-import { MovieSession } from "@/lib/api/types";
+import { AgeRating, MovieSession } from "@/lib/api/types";
+import { getFilterOptions } from "@/lib/api/filter-options";
 
 interface PurchaseModalProps {
     session: MovieSession | null;
     onClose: () => void;
     details?: string;
     title?: string;
+    ageRating: AgeRating | null;
 }
 
-export function PurchaseModal({ session, ...props }: PurchaseModalProps) {
+export function PurchaseModal({ session, ageRating, ...props }: PurchaseModalProps) {
     if (session === null) return null;
     const sessionId = session?.id ?? null;
 
-    return <PurchaseModalContent key={sessionId} session={session} sessionId={sessionId} {...props} />;
+    return <PurchaseModalContent key={sessionId} session={session} sessionId={sessionId} ageRating={ageRating} {...props} />;
 }
 
 function PurchaseModalContent({
@@ -29,13 +31,34 @@ function PurchaseModalContent({
     sessionId,
     onClose,
     details,
-    title
+    title,
+    ageRating
 }: Omit<PurchaseModalProps, "session"> & {
     session: MovieSession;
     sessionId: number;
 }) {
     const [step, setStep] = useState<Step>("seats");
-    const { selected, selectedIds, toggleSeat, subtotal } = useSeatSelection();
+    const { data: filterOptions } = useQuery({
+        queryKey: ["filter-options"],
+        queryFn: getFilterOptions,
+        staleTime: Infinity,
+    });
+
+    const {
+        selected,
+        selectedIds,
+        toggleSeat,
+        subtotal,
+        getTicketTypeForSeat,
+        getPriceForSeat,
+        setTicketTypeForSeat,
+        selectionMessage,
+        isTicketTypeAllowed,
+    } = useSeatSelection(
+        filterOptions?.ticketTypes ?? [],
+        session.price,
+        filterOptions?.maxSeatsPerOrder ?? 0,
+    );
 
     const { data: seatMap, isPending, isError, refetch } = useQuery({
         queryKey: ["session-seats", sessionId],
@@ -135,8 +158,18 @@ function PurchaseModalContent({
                     <SelectionSummary
                         selected={selected}
                         subtotal={subtotal}
+                        maxSeats={filterOptions?.maxSeatsPerOrder ?? 0}
+                        ticketTypes={filterOptions?.ticketTypes ?? []}
+                        getTicketTypeForSeat={getTicketTypeForSeat}
+                        getPriceForSeat={getPriceForSeat}
+                        onTicketTypeChange={(seatId, slug) =>
+                            setTicketTypeForSeat(seatId, slug, ageRating ?? null)
+                        }
                         onRemove={toggleSeat}
                         onNext={() => setStep("checkout")}
+                        selectionMessage={selectionMessage}
+                        ageRating={ageRating}
+                        isTicketTypeAllowed={isTicketTypeAllowed}
                     />
                 </div>
             </section>

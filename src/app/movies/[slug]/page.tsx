@@ -77,6 +77,7 @@ export default async function MoviePage({
                     venues={selectedDayVenues}
                     selectedDate={selectedDate}
                     totalSessions={totalSessions}
+                    ageRating={movie.ageRating}
                 />
 
                 <MovieDetails movie={movie} />

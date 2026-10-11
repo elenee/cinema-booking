@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SessionCard } from "./SessionCard";
-import { MovieSession, VenueSessions } from "@/lib/api/types";
+import { AgeRating, MovieSession, VenueSessions } from "@/lib/api/types";
 
 interface MovieSessionsProps {
     slug: string;
@@ -8,6 +8,7 @@ interface MovieSessionsProps {
     venues: VenueSessions[];
     selectedDate: string;
     totalSessions: number;
+    ageRating: AgeRating
 }
 
 function getNextSevenDays() {
@@ -36,7 +37,7 @@ function groupByHall(sessions: MovieSession[]) {
 }
 
 
-export function MovieSessions({ slug, movieTitle, venues, selectedDate, totalSessions }: MovieSessionsProps) {
+export function MovieSessions({ slug, movieTitle, venues, selectedDate, totalSessions, ageRating }: MovieSessionsProps) {
     console.log(JSON.stringify(venues[0], null, 2));
 
     const days = getNextSevenDays();
@@ -101,6 +102,7 @@ export function MovieSessions({ slug, movieTitle, venues, selectedDate, totalSes
                                                 key={session.id}
                                                 session={session}
                                                 movieTitle={movieTitle}
+                                                ageRating={ageRating}
                                             />
                                         ))}
                                     </div>

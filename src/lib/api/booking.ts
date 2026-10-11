@@ -1,5 +1,5 @@
 import { api } from "./client";
-import { CreateHoldInput, HoldData, OrderData, SeatMapData } from "./types";
+import { CreateHoldInput, CreateOrderInput, HoldData, OrderData, SeatMapData } from "./types";
 
 
 export async function createHold(
@@ -26,7 +26,7 @@ export async function releaseHold(holdId: string): Promise<void> {
 
 
 export async function createOrder(
-    input: CreateHoldInput,
+    input: CreateOrderInput,
 ): Promise<OrderData> {
     const response = await api.post<{ data: OrderData }>(
         "/orders",

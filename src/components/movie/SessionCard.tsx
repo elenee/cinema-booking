@@ -1,10 +1,11 @@
 "use client"
-import type { MovieSession } from "@/lib/api/types";
+import type { AgeRating, MovieSession } from "@/lib/api/types";
 import { useBooking } from "@/providers/booking-provider";
 
 interface SessionCardProps {
     session: MovieSession;
     movieTitle: string
+    ageRating: AgeRating
 }
 
 function formatTime(date: string) {
@@ -14,11 +15,11 @@ function formatTime(date: string) {
     });
 }
 
-export function SessionCard({ session, movieTitle }: SessionCardProps) {
+export function SessionCard({ session, movieTitle, ageRating }: SessionCardProps) {
     const { openBooking } = useBooking();
     return (
         <button
-            onClick={() => openBooking(session, movieTitle)}
+            onClick={() => openBooking(session, movieTitle, ageRating)}
             type="button"
             className="flex rounded-[18px] bg-background text-text-muted p-3.75"
         >
