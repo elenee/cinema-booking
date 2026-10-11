@@ -8,6 +8,8 @@ import { SeatsStep } from "./SeatsStep";
 import { CheckoutForm } from "./CheckoutForm";
 import { SelectionSummary } from "./SelectionSummary";
 import type { AgeRating, MovieSession } from "@/lib/api/types";
+import { BookingConfirmation } from "./BookingConfirmation";
+
 
 interface PurchaseModalProps {
     session: MovieSession | null;
@@ -22,6 +24,7 @@ export function PurchaseModal({ session, ...props }: PurchaseModalProps) {
     return <PurchaseModalContent key={session.id} session={session} {...props} />;
 }
 
+
 function PurchaseModalContent({
     session,
     onClose,
@@ -30,7 +33,7 @@ function PurchaseModalContent({
     ageRating,
 }: Omit<PurchaseModalProps, "session"> & { session: MovieSession }) {
     const flow = usePurchaseFlow(session);
-    const { step, setStep, filterOptions, seatQuery, selection, hold } = flow;
+    const { step, setStep, filterOptions, seatQuery, selection, hold, order } = flow;
     const { data: seatMap, isPending, isError, refetch } = seatQuery;
 
     useEffect(() => {
@@ -73,66 +76,71 @@ function PurchaseModalContent({
                     &times;
                 </button>
 
-                <ModalHeader
-                    title={title}
-                    subtitle={subtitle}
-                    secondsRemaining={isCheckout && hold ? flow.secondsRemaining : undefined}
-                />
-
-                <div className="grid min-h-0 gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-                    <div>
-                        <ModalTabs
-                            active={step}
-                            checkoutDisabled={selection.selected.length === 0}
-                            onChange={setStep}
-                        />
-
-                        {step === "seats" && (
-                            <SeatsStep
-                                seatMap={seatMap}
-                                isPending={isPending}
-                                isError={isError}
-                                onRetry={() => refetch()}
-                                selectedIds={selection.selectedIds}
-                                contestedSeatCodes={flow.contestedSeatCodes}
-                                onToggleSeat={selection.toggleSeat}
-                                message={flow.holdMessage}
+                {order ? (<BookingConfirmation order={order} onClose={onClose} />) :
+                    (
+                        <>
+                            <ModalHeader
+                                title={title}
+                                subtitle={subtitle}
+                                secondsRemaining={isCheckout && hold ? flow.secondsRemaining : undefined}
                             />
-                        )}
 
-                        {isCheckout && hold && (
-                            <CheckoutForm
-                                onSubmit={flow.handleCreateOrder}
-                                isSubmitting={flow.orderLoading}
-                                errorMessage={flow.orderMessage}
-                            />
-                        )}
-                    </div>
+                            <div className="grid min-h-0 gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+                                <div>
+                                    <ModalTabs
+                                        active={step}
+                                        checkoutDisabled={selection.selected.length === 0}
+                                        onChange={setStep}
+                                    />
 
-                    <SelectionSummary
-                        selected={selection.selected}
-                        subtotal={selection.subtotal}
-                        maxSeats={filterOptions?.maxSeatsPerOrder ?? 0}
-                        ticketTypes={filterOptions?.ticketTypes ?? []}
-                        getTicketTypeForSeat={selection.getTicketTypeForSeat}
-                        getPriceForSeat={selection.getPriceForSeat}
-                        onTicketTypeChange={(seatId, slug) =>
-                            selection.setTicketTypeForSeat(seatId, slug, ageRating ?? null)
-                        }
-                        onRemove={selection.toggleSeat}
-                        onNext={
-                            isCheckout
-                                ? () =>
-                                      (document.getElementById("checkout-form") as HTMLFormElement | null)?.requestSubmit()
-                                : flow.handleCreateHold
-                        }
-                        nextLabel={isCheckout ? "Pay: Complete order" : "Next: Checkout"}
-                        nextDisabled={isCheckout && (flow.orderLoading || flow.secondsRemaining <= 0)}
-                        selectionMessage={selection.selectionMessage}
-                        ageRating={ageRating}
-                        isTicketTypeAllowed={selection.isTicketTypeAllowed}
-                    />
-                </div>
+                                    {step === "seats" && (
+                                        <SeatsStep
+                                            seatMap={seatMap}
+                                            isPending={isPending}
+                                            isError={isError}
+                                            onRetry={() => refetch()}
+                                            selectedIds={selection.selectedIds}
+                                            contestedSeatCodes={flow.contestedSeatCodes}
+                                            onToggleSeat={selection.toggleSeat}
+                                            message={flow.holdMessage}
+                                        />
+                                    )}
+
+                                    {isCheckout && hold && (
+                                        <CheckoutForm
+                                            onSubmit={flow.handleCreateOrder}
+                                            isSubmitting={flow.orderLoading}
+                                            errorMessage={flow.orderMessage}
+                                        />
+                                    )}
+                                </div>
+
+                                <SelectionSummary
+                                    selected={selection.selected}
+                                    subtotal={selection.subtotal}
+                                    maxSeats={filterOptions?.maxSeatsPerOrder ?? 0}
+                                    ticketTypes={filterOptions?.ticketTypes ?? []}
+                                    getTicketTypeForSeat={selection.getTicketTypeForSeat}
+                                    getPriceForSeat={selection.getPriceForSeat}
+                                    onTicketTypeChange={(seatId, slug) =>
+                                        selection.setTicketTypeForSeat(seatId, slug, ageRating ?? null)
+                                    }
+                                    onRemove={selection.toggleSeat}
+                                    onNext={
+                                        isCheckout
+                                            ? () =>
+                                                (document.getElementById("checkout-form") as HTMLFormElement | null)?.requestSubmit()
+                                            : flow.handleCreateHold
+                                    }
+                                    nextLabel={isCheckout ? "Pay: Complete order" : "Next: Checkout"}
+                                    nextDisabled={isCheckout && (flow.orderLoading || flow.secondsRemaining <= 0)}
+                                    selectionMessage={selection.selectionMessage}
+                                    ageRating={ageRating}
+                                    isTicketTypeAllowed={selection.isTicketTypeAllowed}
+                                />
+                            </div>
+                        </>
+                    )}
             </section>
         </div>
     );

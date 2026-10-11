@@ -14,6 +14,7 @@ const secondsUntil = (iso: string) =>
 export function usePurchaseFlow(session: MovieSession) {
     const sessionId = session.id;
     const [step, setStep] = useState<Step>("seats");
+    const [order, setOrder] = useState<Awaited<ReturnType<typeof createOrder>> | null>(null);
 
     const { data: filterOptions } = useQuery({
         queryKey: ["filter-options"],
@@ -97,6 +98,14 @@ export function usePurchaseFlow(session: MovieSession) {
         }
     }
 
+    function resetToSeats(message: string) {
+        setHold(null);
+        setStep("seats");
+        removeSeatsById(selected.map((s) => s.id));
+        setHoldMessage(message);
+        void refetch();
+    }
+
     async function handleCreateOrder(formData: CheckoutValues) {
         if (!hold || orderLoading) return;
 
@@ -104,11 +113,32 @@ export function usePurchaseFlow(session: MovieSession) {
         setOrderMessage(null);
 
         try {
-            const order = await createOrder({ holdId: hold.holdId, ...formData });
-            console.log("Order created:", order);
-            // Next: show the booking confirmation.
-        } catch {
-            setOrderMessage("Could not complete your booking. Please try again.");
+            setOrder(await createOrder({ holdId: hold.holdId, ...formData }));
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+                const body = error.response?.data as
+                    | { message?: string; contested?: string[]; errors?: Record<string, string[]> }
+                    | undefined;
+
+                if (status === 409) {
+                    const contested = body?.contested ?? [];
+                    setContestedSeatCodes((prev) => new Set([...prev, ...contested]));
+                    resetToSeats(
+                        contested.length
+                            ? `These seats were just taken: ${contested.join(", ")}. Please choose replacements.`
+                            : body?.message ?? "Some seats were just taken. Please try again.",
+                    );
+                } else if (status === 422 && !body?.errors) {
+                    resetToSeats(body?.message ?? "Your hold time expired. Please re-select your seats.");
+                } else if (status === 422) {
+                    setOrderMessage(Object.values(body!.errors!)[0]?.[0] ?? "Please check your details.");
+                } else {
+                    setOrderMessage(body?.message ?? "Could not complete your booking. Please try again.");
+                }
+            } else {
+                setOrderMessage("Could not complete your booking. Please try again.");
+            }
         } finally {
             setOrderLoading(false);
         }
@@ -152,5 +182,6 @@ export function usePurchaseFlow(session: MovieSession) {
         handleCreateOrder,
         orderLoading,
         orderMessage,
+        order
     };
 }
