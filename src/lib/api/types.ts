@@ -213,3 +213,155 @@ export interface TicketOrder {
     price: number;
   }[];
 }
+
+
+export interface HoldSeatInput {
+  seatId: number;
+  ticketType: TicketType;
+}
+
+export interface CreateHoldInput {
+  seats: HoldSeatInput[];
+}
+
+export interface HeldSeat {
+  seatId: number;
+  code: string;
+  ticketType: {
+    slug: string;
+    name: string;
+  };
+  price: number;
+}
+
+export interface HoldData {
+  holdId: string;
+  sessionId: number;
+  expiresAt: string;
+  secondsRemaining: number;
+  isLive: boolean;
+  subtotal: number;
+  seats: HeldSeat[];
+}
+
+export interface CreateOrderInput {
+  holdId: string;
+  fullName: string;
+  email: string;
+  mobileNumber: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+}
+
+export interface OrderTicket {
+  id: number;
+  seatCode: string;
+  ticketType: {
+    slug: string;
+    name: string;
+  };
+  price: number;
+}
+
+export interface OrderData {
+  id: number;
+  reference: string;
+  status: string;
+  totalPrice: number;
+  paidAt: string;
+  refundedAt: string | null;
+  isUpcoming: boolean;
+  isRefundable: boolean;
+  cardLastFour: string;
+  contact: {
+    fullName: string;
+    email: string;
+    mobileNumber: string;
+  };
+  session: {
+    id: number;
+    startsAt: string;
+    date: string;
+    time: string;
+    timeBand: string;
+    price: number;
+    seatsLeft: number;
+    isSoldOut: boolean;
+    hall: {
+      id: number;
+      name: string;
+    };
+    venue: {
+      id: number;
+      slug: string;
+      name: string;
+      city: string;
+    };
+    format: {
+      id: number;
+      slug: string;
+      name: string;
+      priceUplift: number;
+    };
+    language: {
+      id: number;
+      slug: string;
+      name: string;
+      code: string;
+    };
+    movie: {
+      id: number;
+      slug: string;
+      title: string;
+      posterUrl: string;
+      ageRating: {
+        code: string;
+        minAge: number;
+        description: string;
+      };
+    };
+  };
+  tickets: OrderTicket[];
+}
+
+
+export type SeatState =
+  | "available"
+  | "sold"
+  | "held"
+  | "unavailable";
+
+export interface HallSeat {
+  id: number;
+  code: string;
+  label: string;
+  state: SeatState;
+  aisleAfter: boolean;
+  isMine: boolean;
+}
+
+export interface HallRow {
+  label: string;
+  seats: HallSeat[];
+}
+
+export interface HallSection {
+  name: string;
+  rows: HallRow[];
+}
+
+export interface SeatMapData {
+  sessionId: number;
+  hall: {
+    id: number;
+    name: string;
+    venue: {
+      id: number;
+      slug: string;
+      name: string;
+      city: string;
+    };
+  };
+  sections: HallSection[];
+}
