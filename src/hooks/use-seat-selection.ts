@@ -10,7 +10,7 @@ function isTicketTypeAllowed(
   if (!ageRating) return false;
   console.log({
     "Age Rating":
-    blockedFromRatingAge,
+      blockedFromRatingAge,
     ageRating,
     movieMinAge: ageRating.minAge,
   });
@@ -50,6 +50,30 @@ export function useSeatSelection(
     () => new Set(selected.map((seat) => seat.id)),
     [selected],
   );
+
+
+
+  const removeSeatsById = useCallback((seatIds: number[]) => {
+    const removedIds = new Set(seatIds);
+
+    setSelected(prev =>
+      prev.filter(seat => !removedIds.has(seat.id)),
+    );
+
+    setTicketTypeBySeat(prev => {
+      const next = { ...prev };
+
+      for (const id of removedIds) {
+        delete next[id];
+      }
+
+      return next;
+    });
+
+    setSelectionMessage(null);
+  }, []);
+
+
 
   const getTicketTypeForSeat = useCallback(
     (seat: Seat) => {
@@ -146,6 +170,7 @@ export function useSeatSelection(
     getPriceForSeat,
     setTicketTypeForSeat,
     selectionMessage,
+    removeSeatsById,
     clearSelectionMessage: () => setSelectionMessage(null),
   };
 }

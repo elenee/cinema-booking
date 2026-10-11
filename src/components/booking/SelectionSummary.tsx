@@ -20,6 +20,8 @@ interface SelectionSummaryProps {
         blockedFromRatingAge: number | null,
         ageRating: AgeRating | null,
     ) => boolean;
+    nextLabel?: string
+    nextDisabled?: boolean
 }
 
 export function SelectionSummary({
@@ -34,7 +36,9 @@ export function SelectionSummary({
     onNext,
     selectionMessage,
     ageRating,
-    isTicketTypeAllowed
+    isTicketTypeAllowed,
+    nextLabel,
+    nextDisabled
 }: SelectionSummaryProps) {
     const canContinue = selected.length > 0 && ticketTypes.length > 0;
 
@@ -128,11 +132,11 @@ export function SelectionSummary({
 
             <button
                 type="button"
-                disabled={!canContinue}
+                disabled={!canContinue || nextDisabled}
                 onClick={onNext}
                 className="mt-4 rounded-full bg-primary py-3.25 text-button transition-colors disabled:cursor-not-allowed disabled:bg-[#4A4D5E] disabled:text-white/50"
             >
-                Next: Checkout
+                {nextLabel}
             </button>
         </aside>
     );

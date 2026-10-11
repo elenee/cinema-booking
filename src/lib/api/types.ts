@@ -46,6 +46,7 @@ export interface AgeRating {
   description: string;
 }
 
+
 export interface FilterOptions {
   venues: Venue[];
   formats: Format[];
@@ -217,7 +218,7 @@ export interface TicketOrder {
 
 export interface HoldSeatInput {
   seatId: number;
-  ticketType: TicketType;
+  ticketType: TicketTypeSlug;
 }
 
 export interface CreateHoldInput {
