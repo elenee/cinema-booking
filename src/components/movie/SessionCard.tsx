@@ -1,7 +1,10 @@
+"use client"
 import type { MovieSession } from "@/lib/api/types";
+import { useBooking } from "@/providers/booking-provider";
 
 interface SessionCardProps {
     session: MovieSession;
+    movieTitle: string
 }
 
 function formatTime(date: string) {
@@ -11,9 +14,11 @@ function formatTime(date: string) {
     });
 }
 
-export function SessionCard({ session }: SessionCardProps) {
+export function SessionCard({ session, movieTitle }: SessionCardProps) {
+    const { openBooking } = useBooking();
     return (
         <button
+            onClick={() => openBooking(session, movieTitle)}
             type="button"
             className="flex rounded-[18px] bg-background text-text-muted p-3.75"
         >

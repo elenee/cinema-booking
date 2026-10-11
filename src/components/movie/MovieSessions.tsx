@@ -4,6 +4,7 @@ import { MovieSession, VenueSessions } from "@/lib/api/types";
 
 interface MovieSessionsProps {
     slug: string;
+    movieTitle: string
     venues: VenueSessions[];
     selectedDate: string;
     totalSessions: number;
@@ -35,7 +36,7 @@ function groupByHall(sessions: MovieSession[]) {
 }
 
 
-export function MovieSessions({ slug, venues, selectedDate, totalSessions }: MovieSessionsProps) {
+export function MovieSessions({ slug, movieTitle, venues, selectedDate, totalSessions }: MovieSessionsProps) {
     console.log(JSON.stringify(venues[0], null, 2));
 
     const days = getNextSevenDays();
@@ -99,6 +100,7 @@ export function MovieSessions({ slug, venues, selectedDate, totalSessions }: Mov
                                             <SessionCard
                                                 key={session.id}
                                                 session={session}
+                                                movieTitle={movieTitle}
                                             />
                                         ))}
                                     </div>

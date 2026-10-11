@@ -73,6 +73,7 @@ export default async function MoviePage({
             <div className="grid grid-cols-1 gap-10 px-12.75 py-8 lg:grid-cols-[minmax(0,1fr)_350px]">
                 <MovieSessions
                     slug={slug}
+                    movieTitle={movie.title}
                     venues={selectedDayVenues}
                     selectedDate={selectedDate}
                     totalSessions={totalSessions}
